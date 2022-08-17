@@ -1,0 +1,45 @@
+{% extends 'base.html' %}{% load static %}{% load i18n %}
+{% block title%} {% trans "Register" %} {% endblock title %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock head %}
+
+{% block content %}
+{% include 'include/header.html' %}
+
+<div class="container">
+    <div class="forms">
+        <div class="form-content">
+            <div class="signup-form">
+                {% include 'include/message.html' %}
+                <div class="title">Register</div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="input-boxes">
+                        <div class="input-box">
+                            <i class="fas fa-user"></i>
+                            <input type="text" placeholder="Enter your name" name="name">
+                        </div>
+                        <div class="input-box">
+                            <i class="fas fa-envelope"></i>
+                            <input type="text" placeholder="Enter your email" name="email">
+                        </div>
+                        <div class="input-box">
+                            <i class="fas fa-lock"></i>
+                            <input type="password" placeholder="Enter your password" name="password">
+                        </div>
+                        <div class="input-box">
+                          <i class="fas fa-lock"></i>
+                          <input type="password" placeholder="Re-Enter your password" name="confirm_password">
+                      </div>
+                        <div class="button input-box">
+                            <input type="submit" value="Signup">
+                        </div>
+                            <div class="text sign-up-text">Already have an account? <label for="flip"><a href="{% url 'accounts:login' %}">Login now</a></label></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+{% endblock %}

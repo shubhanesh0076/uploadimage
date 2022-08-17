@@ -1,0 +1,25 @@
+{% extends 'base.html' %}{% load static %}{% load i18n %}
+{% block head %}
+{% block css %}
+
+{% endblock css %}
+{% endblock head %}
+{% block title%} {% trans "Home" %} {% endblock title %}
+
+{% block content %}
+  {% include 'include/header.html' %}
+  <div class="main">
+    <div class="container">
+        <div class="row">
+            {% for image in image_obj %}
+                <div class="card" style="width: 18rem; margin-top:10px;">
+                    <img src="{{image.image.url}}" class="card-img-top" alt="{{image.image.url}}">
+                    <div class="card-body">
+                      <h5 class="card-title">Base64 Image</h5>
+                    </div>
+                </div>
+            {% endfor %}
+        <div>
+    </div>
+  </div>
+{% endblock %}

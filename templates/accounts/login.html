@@ -1,0 +1,113 @@
+{% extends 'base.html' %}{% load static %}{% load i18n %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock head %}
+{% block title%} {% trans "Login" %} {% endblock title %}
+
+{% block content %}
+{% include 'include/header.html' %}
+
+<div class="container">
+    <div class="forms">
+        <div class="form-content">
+            <div class="login-form">
+                <div class="title">{% trans "Login" %}</div>
+                <form method="POST" id="login-form">
+                  {% csrf_token %}
+                    <div class="input-boxes">
+                        <div class="input-box">
+                            <i class="fas fa-envelope"></i>
+                            <input id="usr_email" type="text" placeholder="Enter your email" name="email">
+                        </div>
+                        <span class="inpt-box-msg form-text text-danger " id="user_err_msg" style="font-size: 12px; margin-top: 1px; line-height: 0px;">
+                        </span>
+                        <div class="input-box">
+                            <i class="fas fa-lock"></i>
+                            <input id="user_pass" type="password" placeholder="Enter your password" name="password">
+                        </div>
+                        <span class="inpt-box-msg form-text text-danger " id="pass_err_msg" style="font-size: 12px; margin-top: 1px; line-height: 0px;">
+                        </span>
+                        <div class="text"><a href="#">{% trans "Forgot password?" %}</a></div>
+                        <div class="button input-box">
+                          <button id="inpt-btn" class="inpt-class" type="submit" value="Verify">
+                            Login<img src="{% static 'images/ajax-loader.gif' %}" id="ajax-loader-img" style="height:18px;width:18px;margin-left:7px;display:none;">
+                          </button>
+                        </div>
+                        <div class="text sign-up-text">{% trans "Don't have an account? " %}<label for="flip"><a href="{% url 'accounts:register' %}">{% trans "Register" %}</a></label></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+
+
+{% block script %}
+<script type="text/javascript">
+  $(document).ready(function(){
+    $("#user_err_msg").hide();
+    $("#pass_err_msg").hide();
+    var email_err=true;
+    var pass_err=true;
+
+    function emailValidation(){
+      var email = $("#usr_email").val();
+      const  json_data_list = {{ json_list_val|safe }};
+      const email_lst = Object.values(json_data_list)
+       if(email==""){
+          $("#user_err_msg").show();
+          $("#user_err_msg").html("Please fill the email field.");
+          $("#user_err_msg").focus();
+          $("#usr_email").css("border-bottom-color", "red");
+          usr_email = false;
+          return false;
+       }else if( !email_lst.includes(email) ){
+        $("#user_err_msg").show();
+        $("#user_err_msg").html("Email does't exist.");
+        $("#user_err_msg").focus();
+        $("#usr_email").css("border-bottom-color", "red");
+        msg = false;
+        return false;
+      }else{
+          $("#user_err_msg").hide();
+          $("#usr_email").css("border-bottom-color", "#198754");
+       }
+    }
+
+    function passWordCheck(){
+      pass = $("#user_pass").val();
+      if(pass==""){
+        $("#pass_err_msg").show();
+        $("#pass_err_msg").html("Please fill the password field.");
+        $("#pass_err_msg").focus();
+        $("#user_pass").css("border-bottom-color", "red");
+        usr_email = false;
+        return false;
+      }else{
+          $("#pass_err_msg").hide();
+          $("#user_pass").css("border-bottom-color", "#198754");
+      }
+    }
+
+    $("#usr_email").on('keyup', function(){
+      emailValidation();
+    });
+    $("#user_pass").on('keyup', function(){
+      passWordCheck();
+    });
+    $("#inpt-btn").on('click', function(){
+      email_err=true;
+      pass_err=true;
+      emailValidation();
+      passWordCheck();
+
+      if( (email_err==true) && (pass_err==true) ){
+       return true;
+      }else{
+        return false;
+      }
+     });
+  })
+</script>
+{% endblock script %}
+{% endblock %}
